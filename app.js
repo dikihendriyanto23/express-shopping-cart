@@ -9,12 +9,14 @@ const swaggerUi = require("swagger-ui-express");
 const fs = require("fs");
 const path = require("path");
 const yaml = require("yaml"); // Tambahkan pustaka YAML
+const rateLimiter = require("./src/utils/rateLimiter");
 
 const app = express();
 const PORT = 3000;
 
 // Middleware
 app.use(express.json());
+app.use(rateLimiter);
 
 // Filter Payload
 app.use((req, res, next) => {

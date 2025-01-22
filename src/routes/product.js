@@ -2,6 +2,7 @@ const express = require("express");
 const Product = require("../models/Product");
 const { Op } = require("sequelize");
 const { verifyToken } = require("../routes/auth");
+const { postValidateInput } = require("../controllers/apiController");
 
 const router = express.Router();
 
