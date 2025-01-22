@@ -2,11 +2,12 @@ const express = require("express");
 const CartItems = require("../models/CartItems");
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
+const { verifyToken } = require("../routes/auth");
 
 const router = express.Router();
 
 // Get All Cart Item
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const cartItems = await CartItems.findAll();
     res.json(cartItems);
@@ -16,7 +17,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get cart item by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     const cartItem = await CartItems.findByPk(req.params.id);
     if (!cartItem) return res.status(404).json({ message: "Address not found" });
@@ -27,7 +28,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create a new cart item
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const { CartID, ProductID, Quantity } = req.body;
 
@@ -61,7 +62,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update a cart item
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const updated = await CartItems.update(req.body, { where: { CartItemID: req.params.id } });
     if (updated[0] === 0) return res.status(404).json({ message: "Cart item not found" });
@@ -73,7 +74,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a cart item
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const deleted = await CartItems.destroy({ where: { CartItemID: req.params.id } });
     if (!deleted) return res.status(404).json({ message: "Cart item not found" });

@@ -4,11 +4,12 @@ const Op = sequelize.Op;
 const Carts = require("../models/Carts");
 const CartItems = require("../models/CartItems");
 const Product = require("../models/Product");
+const { verifyToken } = require("../routes/auth");
 
 const router = express.Router();
 
 // Get All Cart
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const carts = await Carts.findAll({
       include: {
@@ -28,7 +29,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get Cart by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     const carts = await Carts.findAll({
       where: {
@@ -50,7 +51,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const { CartID, ProductID, Quantity } = req.body;
 
@@ -71,7 +72,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const cartItemDelete = await CartItems.destroy({
       where: {

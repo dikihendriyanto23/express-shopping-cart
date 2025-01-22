@@ -2,11 +2,12 @@ const express = require("express");
 const Address = require("../models/Address");
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
+const { verifyToken } = require("../routes/auth");
 
 const router = express.Router();
 
 // Get All Address
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const address = await Address.findAll();
     res.json(address);
@@ -16,7 +17,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get address by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     const address = await Address.findAll({ where: { AddressLine1: { [Op.like]: "%" + req.params.id + "%" } } });
     // const address = await Address.findByPk(req.params.id);
@@ -28,7 +29,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create a new address
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const { CartID, AddressLine1, AddressLine2, City, State, ZipCode } = req.body;
 
@@ -48,7 +49,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update a address
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const updated = await Address.update(req.body, { where: { AddressID: req.params.id } });
     if (updated[0] === 0) return res.status(404).json({ message: "Address not found" });
@@ -60,7 +61,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a address
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const deleted = await Address.destroy({ where: { AddressID: req.params.id } });
     if (!deleted) return res.status(404).json({ message: "Address not found" });

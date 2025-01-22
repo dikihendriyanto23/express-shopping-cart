@@ -1,11 +1,12 @@
 const express = require("express");
 const Product = require("../models/Product");
 const { Op } = require("sequelize");
+const { verifyToken } = require("../routes/auth");
 
 const router = express.Router();
 
 // Get All Products
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const products = await Product.findAll();
     res.json(products);
@@ -15,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get All Product with Pagination
-router.get("/paging", async (req, res) => {
+router.get("/paging", verifyToken, async (req, res) => {
   try {
     const { page = 1, size = 10 } = req.query;
 
@@ -39,7 +40,7 @@ router.get("/paging", async (req, res) => {
 });
 
 // Get product by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
@@ -50,7 +51,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Get product by Price and minimum Stock using 2 parameters
-router.get("/filter/:price/:minStock", async (req, res) => {
+router.get("/filter/:price/:minStock", verifyToken, async (req, res) => {
   try {
     const { price, minStock } = req.params;
 
@@ -72,7 +73,7 @@ router.get("/filter/:price/:minStock", async (req, res) => {
 });
 
 // Get product by Price and minimum Stock using request body
-router.get("/filter", async (req, res) => {
+router.get("/filter", verifyToken, async (req, res) => {
   try {
     const { price, minStock } = req.body;
 
@@ -99,7 +100,7 @@ router.get("/filter", async (req, res) => {
 });
 
 // Create a new product
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const { Name, Description, Price, Stock } = req.body;
 
@@ -118,7 +119,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update a product
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const updated = await Product.update(req.body, { where: { ProductID: req.params.id } });
     if (updated[0] === 0) return res.status(404).json({ message: "Product not found" });
@@ -130,7 +131,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a product
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const deleted = await Product.destroy({ where: { ProductID: req.params.id } });
     if (!deleted) return res.status(404).json({ message: "Product not found" });

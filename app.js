@@ -4,6 +4,7 @@ const productsRouter = require("./src/routes/product");
 const addressRouter = require("./src/routes/address");
 const cartRouter = require("./src/routes/cart");
 const cartItemRouter = require("./src/routes/cartItems");
+const { authRouter } = require("./src/routes/auth");
 const swaggerUi = require("swagger-ui-express");
 const fs = require("fs");
 const path = require("path");
@@ -34,6 +35,7 @@ app.use("/products", productsRouter);
 app.use("/address", addressRouter);
 app.use("/cart", cartRouter);
 app.use("/cart-items", cartItemRouter);
+app.use("/auth", authRouter);
 
 // Database Sync
 const syncDatabase = async () => {
