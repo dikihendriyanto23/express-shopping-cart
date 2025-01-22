@@ -1,0 +1,20 @@
+{
+  "name": "express-shopping-cart",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "sequelize": "^6.37.5",
+    "swagger-ui-express": "^5.0.1",
+    "tedious": "^18.6.1",
+    "yaml": "^2.7.0"
+  }
+}
